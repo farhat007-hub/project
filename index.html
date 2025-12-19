@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+
+    <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: var(--tg-theme-bg-color);
+        color: var(--tg-theme-text-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    #main {
+        background: var(--tg-theme-secondary-bg-color);
+        width: 320px;
+        padding: 20px;
+        border-radius: 14px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        text-align: center;
+    }
+
+    #main h1 {
+        margin-bottom: 12px;
+        font-size: 22px;
+    }
+
+    #main img {
+        width: 130px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+
+    #main p {
+        font-size: 14px;
+        line-height: 1.4;
+        color: var(--tg-theme-hint-color);
+        margin-bottom: 20px;
+    }
+
+    #buy {
+        width: 100%;
+        background: var(--tg-theme-button-color);
+        color: var(--tg-theme-button-text-color);
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.2s, opacity 0.2s;
+    }
+
+    #buy:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+
+    /* ===== ФОРМА ===== */
+
+    #form {
+        display: none;
+        background: var(--tg-theme-secondary-bg-color);
+        width: 320px;
+        padding: 20px;
+        border-radius: 14px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    #form input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(0,0,0,0.15);
+        font-size: 14px;
+        background: var(--tg-theme-bg-color);
+        color: var(--tg-theme-text-color);
+    }
+
+    #form input::placeholder {
+        color: var(--tg-theme-hint-color);
+    }
+
+    #order {
+        width: 100%;
+        background: var(--tg-theme-button-color);
+        color: var(--tg-theme-button-text-color);
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    #order:hover {
+        opacity: 0.9;
+    }
+</style>
+
+</head>
+<body>
+    <div id="main">
+        <h1>Онлайн магазин</h1>
+        <img src="derzko69.jpeg" alt="Товар">
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Animi, cum in magni minima nesciunt quidem rem reprehenderit.
+        </p>
+        <button id="buy">Купить</button>
+    </div>
+    <form id="form"> 
+        <input type="text" placeholder="Имя" id="user_name">
+        <input type="text" placeholder="Email" id="user_email">
+        <input type="text" placeholder="Телефон" id="user_phone">
+        <div id="error"></div>
+        <button id="order"></button>
+    </form>
+    <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+    <script>
+        let tg = window.Telegram.WebApp;
+        let buy = document.getElementById("buy");
+        let order= document.getElementById("order");
+        tg.expand();
+
+        buy.addEventListener("click", () =>{
+            document.getElementById("main").style.display = "none";
+            document.getElementById("form").style.display = "block";
+            document.getElementById("user_name").value = tg.initDataUnsafe.user.first_name + "" + tg.initDataUnsafe.last_name;
+        });
+        order.addEventListener("click", () =>{
+            document.getElementById("error").innerText = '';
+            let name = document.getElementById("user_name").value;
+            let email = document.getElementById("user_email").value;
+            let phone = document.getElementById("user_phone").value;
+            if(name.length < 5){
+                document.getElementById("error").innerText = 'Ошибки в имени';
+                return
+            }
+            if(email.length < 5){
+                document.getElementById("error").innerText = 'Ошибки в email';
+                return
+            }
+            if(email.length < 5){
+                document.getElementById("error").innerText = 'Ошибки в phone';
+                return
+            }
+
+            let data = {
+                name: name, 
+                email: email,
+                phone: phone
+            }
+            tg.sendData(JSON.stringify(data));
+
+
+
+            tg.close();
+        });
+    </script>
+</body>
+</html>
